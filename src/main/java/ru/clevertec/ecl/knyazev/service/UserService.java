@@ -13,7 +13,7 @@ public interface UserService {
 	 * @return User DTO by it's name
 	 * @throws ServiceException when invalid user name given or nothing found
 	 */
-	UserDTO showByUserName(String userName) throws ServiceException;
+	UserDTO showUserByName(String userName) throws ServiceException;
 
 	/**
 	 * 

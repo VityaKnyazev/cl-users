@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  db-news:
+  db-users:
      image: postgres:15.2
      restart: always
      ports:
