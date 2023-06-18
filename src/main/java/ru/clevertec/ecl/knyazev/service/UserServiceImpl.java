@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.clevertec.ecl.knyazev.dto.UserDTO;
 import ru.clevertec.ecl.knyazev.entity.User;
+import ru.clevertec.ecl.knyazev.mapper.SecurityUserMapper;
 import ru.clevertec.ecl.knyazev.mapper.UserMapper;
 import ru.clevertec.ecl.knyazev.repository.UserRepository;
 import ru.clevertec.ecl.knyazev.service.exception.ServiceException;
@@ -24,16 +25,18 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	
 	private UserMapper userMapperImpl;
+	
+	private SecurityUserMapper securityUserMapperImpl;
 
 	@Override
-	public UserDTO showUserByName(String userName) throws ServiceException {
+	public org.springframework.security.core.userdetails.User showSecurityUserByName(String userName) throws ServiceException {
 		
 		User user = userRepository.findUserByName(userName).orElseThrow(() -> {
 			log.error("User with name={} not found", userName);
 			return new ServiceException("User not found");
 		});		
 		
-		return userMapperImpl.toUserDTO(user);
+		return securityUserMapperImpl.toSecurityUser(user);
 	}
 
 	@Override

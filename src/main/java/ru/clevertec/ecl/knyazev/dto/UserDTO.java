@@ -30,7 +30,7 @@ public class UserDTO {
 	@Size(min = 3, max = 30, message = "User name must contains from 3 to 30 symbols")
 	private String name;
 
-	@Size(min = 68, max = 68, message = "User password must contains 68 symbols")
+	@Size(min = 3, max = 68, message = "User password must contains 68 symbols")
 	private String password;
 
 	@Email(message = "Invalid user email")
