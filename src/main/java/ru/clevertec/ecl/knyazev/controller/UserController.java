@@ -3,7 +3,6 @@ package ru.clevertec.ecl.knyazev.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,14 +29,14 @@ public class UserController {
 	private UserService userServiceImpl;
 	
 	@GetMapping(value = "/users")
-	public ResponseEntity<?> getSecurityUser(@RequestParam(name = "user_name")
+	public ResponseEntity<?> getUser(@RequestParam(name = "user_name")
 										@NotNull(message = "User name must must be no null")
 			                         	@Size(message = "User name must be greater than 3 and less than 30 symbols") 
 	                                 	String userName) {		
 		
 		try {
-			User securityUser = userServiceImpl.showSecurityUserByName(userName);
-			return ResponseEntity.ok().body(securityUser);
+			UserDTO userDTO = userServiceImpl.showUserByName(userName);
+			return ResponseEntity.ok().body(userDTO);
 		} catch (ServiceException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

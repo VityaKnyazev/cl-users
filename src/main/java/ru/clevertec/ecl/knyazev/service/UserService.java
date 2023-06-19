@@ -1,7 +1,5 @@
 package ru.clevertec.ecl.knyazev.service;
 
-import org.springframework.security.core.userdetails.User;
-
 import ru.clevertec.ecl.knyazev.dto.UserDTO;
 import ru.clevertec.ecl.knyazev.service.exception.ServiceException;
 
@@ -9,13 +7,13 @@ public interface UserService {
 
 	/**
 	 * 
-	 * Get security user by user name with authorities
+	 * Get user DTO by user name with authorities
 	 * 
 	 * @param userName user name
-	 * @return Security user by it's name
+	 * @return User DTO with authorities by it's name
 	 * @throws ServiceException when invalid user name given or nothing found
 	 */
-	User showSecurityUserByName(String userName) throws ServiceException;
+	UserDTO showUserByName(String userName) throws ServiceException;
 
 	/**
 	 * 

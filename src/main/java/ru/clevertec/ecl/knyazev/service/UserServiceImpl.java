@@ -1,53 +1,85 @@
 package ru.clevertec.ecl.knyazev.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.clevertec.ecl.knyazev.dto.UserDTO;
+import ru.clevertec.ecl.knyazev.entity.Role;
 import ru.clevertec.ecl.knyazev.entity.User;
-import ru.clevertec.ecl.knyazev.mapper.SecurityUserMapper;
 import ru.clevertec.ecl.knyazev.mapper.UserMapper;
 import ru.clevertec.ecl.knyazev.repository.UserRepository;
 import ru.clevertec.ecl.knyazev.service.exception.ServiceException;
 
 @Service
+@Slf4j
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor_ = { @Autowired })
-@Slf4j
 public class UserServiceImpl implements UserService {
 	
 	private static final String ADDING_ERROR = "Error on adding user";
+	
+	private static final String DEFAULT_ROLE = "ROLE_SUBSCRIBER";
+	
+	private RoleService roleServiceImpl;
 	
 	private UserRepository userRepository;
 	
 	private UserMapper userMapperImpl;
 	
-	private SecurityUserMapper securityUserMapperImpl;
+	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public org.springframework.security.core.userdetails.User showSecurityUserByName(String userName) throws ServiceException {
+	@Transactional(readOnly = true)
+	public UserDTO showUserByName(String userName) throws ServiceException {
 		
 		User user = userRepository.findUserByName(userName).orElseThrow(() -> {
 			log.error("User with name={} not found", userName);
 			return new ServiceException("User not found");
 		});		
 		
-		return securityUserMapperImpl.toSecurityUser(user);
+		return userMapperImpl.toUserDTO(user);
 	}
 
 	@Override
+	@Transactional(rollbackFor = ServiceException.class)
 	public UserDTO registerUser(UserDTO userDTO) throws ServiceException {
 		
 		if (userDTO == null || userDTO.getId() != null) {
+			log.error("Invalid user given for registration");
 			throw new ServiceException(ADDING_ERROR);
 		}
 		
 		try {
 			User savingUser = userMapperImpl.toUser(userDTO);
+			
+			String password = savingUser.getPassword();
+			
+			if (password == null) {
+				log.error("Invalid user password given for registration");
+				throw new ServiceException(ADDING_ERROR);
+			} else {
+				savingUser.setPassword(passwordEncoder.encode(password));
+			}			
+				
+			Role defaultRole = roleServiceImpl.showRoleByName(DEFAULT_ROLE);
+				
+			savingUser.setRoles(new ArrayList<>() {
+				
+				private static final long serialVersionUID = -7942440692758081191L;
+				
+			{
+				add(defaultRole);
+			}});
+			
+			savingUser.setEnabled(true);
 			
 			User savedUser = userRepository.save(savingUser);
 			
