@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,11 @@ public class UserDTO {
 	@Positive(message = "User id must be equals to or above 1")
 	private Long id;
 
+	@NotBlank(message = "User name must be not null")
 	@Size(min = 3, max = 30, message = "User name must contains from 3 to 30 symbols")
 	private String name;
 
+	@NotBlank(message = "User password must be not null")
 	@Size(min = 3, max = 68, message = "User password must contains 68 symbols")
 	private String password;
 

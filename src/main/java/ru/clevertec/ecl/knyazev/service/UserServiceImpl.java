@@ -62,12 +62,8 @@ public class UserServiceImpl implements UserService {
 			
 			String password = savingUser.getPassword();
 			
-			if (password == null) {
-				log.error("Invalid user password given for registration");
-				throw new ServiceException(ADDING_ERROR);
-			} else {
-				savingUser.setPassword(passwordEncoder.encode(password));
-			}			
+			
+			savingUser.setPassword(passwordEncoder.encode(password));			
 				
 			Role defaultRole = roleServiceImpl.showRoleByName(DEFAULT_ROLE);
 				
