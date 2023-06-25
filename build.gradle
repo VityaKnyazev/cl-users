@@ -21,6 +21,7 @@ ext {
 	liquibaseVersion = '4.21.1'
 	piocliVersion = '4.7.3'
 	
+	testcontainersPostgresVersion = '1.17.6'	
 }
 
 group = 'ru.clevertec.ecl.knyazev'
@@ -55,7 +56,12 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion"
     
     
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+	testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation "org.testcontainers:postgresql:$testcontainersPostgresVersion"
+	testImplementation "org.liquibase:liquibase-core:$liquibaseVersion"
 }
 
 liquibase {

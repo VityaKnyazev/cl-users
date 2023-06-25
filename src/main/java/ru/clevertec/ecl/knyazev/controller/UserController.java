@@ -30,7 +30,7 @@ public class UserController {
 	
 	@GetMapping(value = "/users")
 	public ResponseEntity<?> getUser(@RequestParam(name = "user_name")
-										@NotNull(message = "User name must must be no null")
+										@NotNull(message = "User name must must be not null")
 			                         	@Size(message = "User name must be greater than 3 and less than 30 symbols") 
 	                                 	String userName) {		
 		

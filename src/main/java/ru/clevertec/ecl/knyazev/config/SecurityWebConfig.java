@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,23 +30,24 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import ru.clevertec.ecl.knyazev.controller.ExceptionController.ErrorMessage;
 
 @Configuration
-@Profile(value = "dev")
 @EnableWebSecurity
-@NoArgsConstructor
+@ConfigurationProperties("spring.security.client-authentication")
+@RequiredArgsConstructor(onConstructor_ = { @Autowired }  )
+@Setter
 public class SecurityWebConfig {
 	
 	private static final String CLIENT_REQUEST_URL = "/users";
 	
-	private ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 	
-	@Autowired
-	public SecurityWebConfig(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper;
-	}
+	private String username;
+	
+	private String password;
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -101,8 +102,8 @@ public class SecurityWebConfig {
 		
 		InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
 		inMemoryUserDetailsManager.createUser(User.builder()
-											      .username("ConnectionClient")
-											      .password("{bcrypt}$2a$12$rC8JSZDWnLggwmDRrA5sWu0xZShWO7NdsEvvRuotaUJnxK2tMYn06")
+											      .username(username)
+											      .password(passwordEncoder().encode(password))
 											      .authorities("ROLE_CLIENT")
 											      .build());
 		
@@ -120,7 +121,7 @@ public class SecurityWebConfig {
 	}
 	
 	@Bean
-	AuthenticationManager authenticationManager() {
+	AuthenticationManager providerManager() {
 		ProviderManager providerManager = new ProviderManager(daoAuthenticationProvider());
 	
 		return providerManager;
@@ -129,7 +130,7 @@ public class SecurityWebConfig {
 	@Bean
 	BasicAuthenticationFilter basicAuthenticationFilter() {
 		
-		BasicAuthenticationFilter basicAuthenticationFilter = new BasicAuthenticationFilter(authenticationManager());
+		BasicAuthenticationFilter basicAuthenticationFilter = new BasicAuthenticationFilter(providerManager());
 		
 		return basicAuthenticationFilter;
 	}

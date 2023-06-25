@@ -8,6 +8,12 @@ spring:
    config:
       activate:
          on-profile: dev
+   
+#Spring Security settings for username and password client base authentication
+   security:
+      client-authentication:
+         username: ConnectionClient
+         password: connectionClient
          
 server:
    port: 8083
@@ -26,9 +32,6 @@ connection:
       dialect: org.hibernate.dialect.PostgreSQLDialect
       showSql: true
       transactionIsolationValue: 2
-   redis:
-      host: localhost
-      port:
       
 
 ---      
@@ -37,6 +40,12 @@ spring:
    config:
       activate:
          on-profile: test
+         
+#Spring Security test settings for username and password client base authentication
+   security:
+      client-authentication:
+         username: ConnectionTestClient
+         password: connectionTestClient
 
 connection:
    db:
