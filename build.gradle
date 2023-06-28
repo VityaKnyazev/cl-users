@@ -66,14 +66,23 @@ dependencies {
 
 liquibase {
   activities {
-    users {
+    usersDev {
     	  changeLogFile "/src/main/resources/liquibase/db-user-changelog.xml"
           driver "org.postgresql.Driver"
 		  url "jdbc:postgresql://localhost:5433/users?useUnicode=true&characterEncoding=UTF-8"
 		  username "security"
           password "security"
     }
+    usersProd {
+    	  changeLogFile "/src/main/resources/liquibase/db-user-changelog.xml"
+          driver "org.postgresql.Driver"
+		  url "jdbc:postgresql://db-users:5432/users?useUnicode=true&characterEncoding=UTF-8"
+		  username "security"
+          password "security"
+    }
   }
+  
+  runList = 'usersDev'
 }
 
 tasks.named('test') {

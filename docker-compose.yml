@@ -10,3 +10,7 @@ services:
         - POSTGRES_USER=security
         - POSTGRES_PASSWORD=security
         - POSTGRES_DB=users
+#  app-users:
+#     build: ./
+#     ports:
+#        - 8083:8083

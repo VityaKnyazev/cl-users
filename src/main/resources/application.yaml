@@ -1,6 +1,37 @@
 spring:
    profiles:
       active: dev
+      
+---
+
+spring:
+   config:
+      activate:
+         on-profile: prod
+   
+#Spring Security settings for username and password client base authentication
+   security:
+      client-authentication:
+         username: ConnectionProdClient
+         password: connectionProdClient
+         
+server:
+   port: 8083
+
+connection:
+   db:
+      driverClassName: org.postgresql.Driver
+      jdbcUrl: jdbc:postgresql://db-users:5432/users?charSet=utf-8
+      username: security
+      password: security
+      maxPoolSize: 3
+      connectionTimeout: 3000
+   hibernate:
+      schema: none
+      sessionContext: thread
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      showSql: true
+      transactionIsolationValue: 2
                   
 ---
 
@@ -12,8 +43,8 @@ spring:
 #Spring Security settings for username and password client base authentication
    security:
       client-authentication:
-         username: ConnectionClient
-         password: connectionClient
+         username: ConnectionDevClient
+         password: connectionDevClient
          
 server:
    port: 8083
