@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,6 +34,7 @@ import ru.clevertec.ecl.knyazev.integration.testconfig.testcontainers.PostgreSQL
 @ActiveProfiles(profiles = { "test" })
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = { "spring.config.location=classpath:application-test.yaml" })
 @EnableConfigurationProperties
 @ConfigurationProperties(value = "spring.security.client-authentication")
 @ContextHierarchy({

@@ -6,7 +6,9 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.0'
 }
 
-ext { 
+ext {
+
+	springCloudVersion = '4.0.3'
 	
 	hibernateValidatorVersion = '8.0.0.Final'
 	
@@ -38,6 +40,8 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-rest"
 	implementation "org.springframework.boot:spring-boot-starter-web"
 	implementation "org.springframework.boot:spring-boot-starter-security"
+	
+	implementation "org.springframework.cloud:spring-cloud-starter-config:$springCloudVersion"
 	
 	implementation "org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion"
 	
@@ -82,7 +86,7 @@ liquibase {
     }
   }
   
-  runList = 'usersDev'
+  runList = 'usersProd'
 }
 
 tasks.named('test') {

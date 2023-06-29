@@ -1,0 +1,36 @@
+spring:
+   config:
+      activate:
+         on-profile: test
+         
+   cloud:
+      config:
+         enabled: false
+         
+#Spring Security test settings for username and password client base authentication
+   security:
+      client-authentication:
+         username: ConnectionTestClient
+         password: connectionTestClient
+
+connection:
+   db:
+      driverClassName: org.postgresql.Driver
+      jdbcUrl: ${db_url}
+      username: ${db_user}
+      password: ${db_password}
+      maxPoolSize: 3
+      connectionTimeout: 3000
+   hibernate:
+      schema: none
+      sessionContext: thread
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      showSql: true
+      transactionIsolationValue: 2
+testcontainers:
+   postgresqlDockerImage: postgres:15.2
+   jdbcUrlEnvVar: db_url
+   usernameEnvVar: db_user
+   passwordEnvVar: db_password
+   liquibaseChangelogFile: /liquibase/db-test-users-changelog.xml
+         

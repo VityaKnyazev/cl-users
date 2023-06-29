@@ -10,7 +10,16 @@ services:
         - POSTGRES_USER=security
         - POSTGRES_PASSWORD=security
         - POSTGRES_DB=users
-#  app-users:
-#     build: ./
-#     ports:
-#        - 8083:8083
+     networks:
+        - config_custom-app-network
+  
+  app-users:
+     build: ./
+     ports:
+        - 8083:8083
+     networks:
+        - config_custom-app-network
+        
+networks:
+   config_custom-app-network:
+      external: true
